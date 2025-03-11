@@ -10,17 +10,13 @@ const mockSeats: Seat[] = [
 ];
 
 //Tests that colors change. Tests that there is a book button. Tests that there are SeatButtons.
-
 describe("App Integration Tests", () => {
   beforeEach(() => {
     vi.spyOn(api, "getSeats").mockResolvedValue(mockSeats);
-    vi.spyOn(api, "bookSeats").mockImplementation(
-      (
-        seats: number[] //korrekt?
-      ) =>
-        Promise.resolve<Seat[]>(
-          seats.map((seat) => ({ seatNumber: seat, isAvailable: false }))
-        )
+    vi.spyOn(api, "bookSeats").mockImplementation((seats: number[]) =>
+      Promise.resolve<Seat[]>(
+        seats.map((seat) => ({ seatNumber: seat, isAvailable: false }))
+      )
     );
     Object.defineProperty(window, "matchMedia", {
       writable: true,
@@ -44,11 +40,9 @@ describe("App Integration Tests", () => {
   it("should allow selecting seats and booking them", async () => {
     render(<App />);
 
-    // Wait for seats to load
     const seatButtons = await screen.findAllByTestId("seat-button");
     expect(seatButtons).toHaveLength(2);
 
-    //check not selected
     const firstSeatButton = seatButtons[0];
     const secondSeatButton = seatButtons[1];
 
@@ -61,8 +55,6 @@ describe("App Integration Tests", () => {
     const blue = "rgb(0, 0, 139)";
     const red = "rgb(255, 0, 0)";
 
-    //Kolla grön
-
     expect(firstSeatBackgroundColor).toBe(green);
     expect(seacondBackgroundSeatColor).toBe(green);
 
@@ -74,20 +66,16 @@ describe("App Integration Tests", () => {
     const secondSelectedBackgroundSeatColor =
       window.getComputedStyle(secondSeatButton).backgroundColor;
 
-    // Check if seats are selected
-    expect(firstSelectedSeatBackgroundColor).toBe(blue); //Updated?
+    expect(firstSelectedSeatBackgroundColor).toBe(blue);
     expect(secondSelectedBackgroundSeatColor).toBe(blue);
 
     expect(firstSeatButton.getAttribute("disabled")).toBeNull();
     expect(secondSeatButton.getAttribute("disabled")).toBeNull();
 
-    // Click the book button
     const bookButton = screen.getByTestId("book-button");
 
-    //Mocka book seats
     fireEvent.click(bookButton);
 
-    // Wait for seats to be updated
     const updatedSeatButtons = await screen.findAllByTestId("seat-button");
 
     const firstUpdatedSeatButton = updatedSeatButtons[0];

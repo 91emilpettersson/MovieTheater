@@ -1,10 +1,9 @@
-import { describe, it, expect, vi } from "vitest"; // Import Vitest utilities
-import { render, screen, fireEvent } from "@testing-library/react"; // Use React Testing Library
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import SeatButton from "../components/SeatButton";
 
 //Tests that there is a SeatButton component and that it behaves like a button.
-//Tests that it's text shifts on it's availability
-
+//Tests that its text shifts on its availability
 describe("SeatButton", () => {
   it("renders the button", () => {
     render(

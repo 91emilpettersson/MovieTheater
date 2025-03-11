@@ -1,5 +1,4 @@
 export type Seat = {
-  //Double maintenance
-  seatNumber: number; //små bokstäver, json-formatterinmg från backend
+  seatNumber: number;
   isAvailable: boolean;
 };

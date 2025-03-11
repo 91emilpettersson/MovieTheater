@@ -27,7 +27,6 @@ namespace MovieTheaterBackend
 
             builder.RegisterApiControllers(assembly);
 
-            //Måste kanske göra för varje request??
             var configuration = MediatRConfigurationBuilder
                 .Create(typeof(GetSeatsRequest).Assembly)
                 .WithAllOpenGenericHandlerTypesRegistered()
