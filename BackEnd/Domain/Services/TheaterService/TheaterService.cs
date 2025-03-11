@@ -27,7 +27,7 @@ namespace Domain.Services.TheaterService
                 throw new ArgumentException("Too large booking.");
             }
 
-            if(seatNumbers.Any(s => s < 0 || s >= Common.Constants.NUMBER_OF_SEATS))
+            if (seatNumbers.Any(s => s < 0 || s >= Common.Constants.NUMBER_OF_SEATS))
             {
                 throw new ArgumentException("Invalid seat number(s)");
             }
@@ -38,17 +38,14 @@ namespace Domain.Services.TheaterService
             {
                 var bookingsDatabase = theaterDataService.GetSeats();
 
-                if (seatNumbers.Any(key => bookingsDatabase.TryGetValue(key, out bool value) && !value))
+                if (seatNumbers.Any(key => !bookingsDatabase.TryGetValue(key, out bool value) || !value))
                 {
                     return null;
                 }
 
                 foreach (int seat in seatNumbers)
                 {
-                    if (bookingsDatabase.ContainsKey(seat))//Bör kunna ta bort
-                    {
-                        bookingsDatabase[seat] = false;
-                    }
+                    bookingsDatabase[seat] = false;
                 }
 
                 var savedDatabaseDict = theaterDataService.Save(bookingsDatabase);
