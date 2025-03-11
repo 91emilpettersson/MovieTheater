@@ -51,7 +51,6 @@ class Api {
   }
 
   async bookSeats(body: number[]): Promise<Seat[] | null> {
-    //Skapa ett object "UserRequest" eller nått, som håller en array, property SeatNumbers eller nått. Jämför svetto
     return await this.request("PATCH", "/api/theater/book", body);
   }
 }
