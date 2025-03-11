@@ -12,18 +12,18 @@ The two core endpoints *api/theater/seats* and *api/theater/book* are accessed t
 
 Using a ConcurrentDictionary implementing rollback on colliding bookings was considered to use for the mock database. But in the end a lock was chosen to deal with concurrent bookings. This is slower than the ConcurrentDatabase, but in a solution using a ConcurrentDatabase with rollback there could be a scenario where a booking that should go through does not. See for example:
 
-User A books seats 1,2,3
-User B books seats 3,4,5
-User C books seats 5,6,7
-
-Assume C books seat 5 before B. The rollback then frees up 3 and 4 from B's booking.
-But B had already reserved 3 when A reaches it, so A is not allowed to book 1,2,3 even if the seats would be available in the end.
+User A books seats 1,2,3  
+User B books seats 3,4,5  
+User C books seats 5,6,7  
+Assume C books seat 5 before B. The rollback then frees up 3 and 4 from B's booking.  
+But B had already reserved 3 when A reaches it, so A is not allowed to book 1,2,3 even if the seats would be available in the end.  
 
 Therefore the lock-solution is used instead and it should not be a bottleneck for a theater booking system, since it is unlikely that so many users try to book seats for the same movie at the same time that it slows down the application noticeably.
 
 Splitting up the application in these many layers would be excessive for such a simple application, but the goal is rather to show a small example of how a bigger project could be designed. A real application would of course also use a real database.
     
 ### Frontend (React)
+The frontend uses yarn for package managing and vite to get a development server with hot module replacement. ESLint is used to keep the code consistent (default rules).
 
 The frontend consists of three main React components; [SeatGrid](https://github.com/91emilpettersson/MovieTheater/blob/main/frontend/src/components/SeatGrid.tsx), [SeatButton](https://github.com/91emilpettersson/MovieTheater/blob/main/frontend/src/components/SeatButton.tsx) and [BookButton](https://github.com/91emilpettersson/MovieTheater/blob/main/frontend/src/components/BookButton.tsx).
 - SeatGrid represent the seat selection grid of the movie theater keep track of states and logic.
@@ -41,7 +41,6 @@ The frontend consists of three main React components; [SeatGrid](https://github.
 There are two [integration tests](https://github.com/91emilpettersson/MovieTheater/blob/main/BackEnd/API.Test/Integration/TheaterIntegrationTest.cs), one that covers only a happy case and one that tests concurrent booking.
 
 ### Frontend
-The frontend uses yarn for package managing and vite to get a development server with hot module replacement. ESLint is used to keep the code consistent (default rules).
 
 #### Unit tests
 The frontend unit tests use vitest. Consideration to include the jest-dom library was made, since it would make the tests a bit more readable, but was in the end decided against since it did not feel right to mix vitest and jest. It could be confusing for a new developer as to which test framework is used in the application. All the unit tests follow the naming convention *theComponentBeingTested.test.tsx*.
@@ -97,7 +96,7 @@ Unit tests are kept in a single folder [test](https://github.com/91emilpettersso
 ### Backend
 The backend is split up in seperate projects to clarify their different areas of concern. The controller is kept in the API-project and is responsible for acccepting calls to the endpoints. This is also the startup project. Mediator-requests and handlers transfer data from the controller to the domain-layer. This makes it possible to change where the data is sent without changing the controller directly. These are kept in the Application-project. The domain logic is kept in the Domain-project and it makes calls to the mock-database that is in the Data-project. There is a lock to make sure that there are no concurrent operations on the database.
 
-The project uses dependency injection, making use of public interfaces and internal classes that implement them. This makes it possible to switch out the implementation without chaning the place where it is used and decreases coupling within the project. It also makes the project more secure and allows us to mock up classes by using the interfaces they implement.
+The project uses dependency injection, making use of public interfaces and internal classes that implement them. This makes it possible to switch out the implementation without changing the place where it is used and decreases coupling within the project. It also makes the project more secure and allows us to mock up classes by using the interfaces they implement.
 
 There are two test projects. Domain.Test holds unit tests for the Domain logic. And API.Test holds the Integration Tests, it was chosen because the controller is the starting point of the Integration tests.
 
@@ -108,9 +107,9 @@ There are two test projects. Domain.Test holds unit tests for the Domain logic. 
 - Playwright is not completely correctly setup, a test will not reset the test environment. So the happy case test will book the first seat, but if it is run directly again, the seat will already be booked and unavailable so the test will fail the second time.
 - Deploying the application to Azure Static Web Application (frontend) and Azure App Service (backend).
 - Some kind of simple CI/CD pipeline, running tests and deploying.
-- Putting some time into figuring out how not to set json serialization to camelcase in two spots in backend code.
-- Other color for the seats that are booked.
-- Mer flexibel CSS för biosalonger av olika storlek och layout
+- Putting some time into figuring out how not to set json serialization to camelcase in two spots in backend code. Now it is done directly in the controller, this is not nice.
+- Other color for the seats that are just booked by a user, to seperate them from previously booked seats and give the user an indication of succesful booking.
+- More flexible CSS for movie theaters of different size and layout, now it forces columns of ten.
 
 ## How I would mentor junior developers
 
