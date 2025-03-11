@@ -1,6 +1,6 @@
 ﻿namespace Common.Types
 {
-    public class SeatData
+    public class Seat
     {
         public int SeatNumber { get; set; }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Application.Handlers.TheaterHandlers
 {
-    public class GetSeatsRequest : IRequest<List<SeatData>>
+    public class GetSeatsRequest : IRequest<List<Seat>>
     {
 
     }

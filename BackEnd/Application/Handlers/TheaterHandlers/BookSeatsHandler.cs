@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Handlers.TheaterHandlers
 {
-    public class BookSeatsHandler : IRequestHandler<BookSeatsRequest, List<SeatData>>
+    public class BookSeatsHandler : IRequestHandler<BookSeatsRequest, List<Seat>>
     {
         private readonly ITheaterService theaterService;
 
@@ -16,7 +16,7 @@ namespace Application.Handlers.TheaterHandlers
             this.theaterService = theaterService;
         }
 
-        public async Task<List<SeatData>> Handle(BookSeatsRequest request, CancellationToken cancellationToken)
+        public async Task<List<Seat>> Handle(BookSeatsRequest request, CancellationToken cancellationToken)
         {
             return await theaterService.BookSeats(request.SeatNumbers);
         }

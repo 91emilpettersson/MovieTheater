@@ -21,7 +21,7 @@ namespace MovieTheaterBackend.Controllers
 
         [HttpGet]
         [Route("seats")]
-        public async Task<List<SeatData>> Get()
+        public async Task<List<Seat>> Get()
         {
             return await mediator.Send(new GetSeatsRequest());
         }

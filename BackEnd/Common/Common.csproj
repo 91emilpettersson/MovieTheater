@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\SeatData.cs" />
+    <Compile Include="Types\Seat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

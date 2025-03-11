@@ -20,7 +20,7 @@ namespace Domain.Services.TheaterService
         }
 
         /// <returns>May return null.</returns>
-        public async Task<List<SeatData>> BookSeats(List<int> seatNumbers)
+        public async Task<List<Seat>> BookSeats(List<int> seatNumbers)
         {
             if(seatNumbers.Count > BOOKING_LIMIT)
             {
@@ -32,7 +32,7 @@ namespace Domain.Services.TheaterService
                 throw new ArgumentException("Invalid seat number(s)");
             }
 
-            List<SeatData> savedDatabase = null;
+            List<Seat> savedDatabase = null;
 
             lock (_lock)
             {
@@ -53,7 +53,7 @@ namespace Domain.Services.TheaterService
 
                 var savedDatabaseDict = theaterDataService.Save(bookingsDatabase);
                 savedDatabase = savedDatabaseDict
-                    .Select(keyValuePair => new SeatData
+                    .Select(keyValuePair => new Seat
                     {
                         SeatNumber = keyValuePair.Key,
                         IsAvailable = keyValuePair.Value
@@ -64,14 +64,14 @@ namespace Domain.Services.TheaterService
             return savedDatabase;
         }
 
-        public async Task<List<SeatData>> GetSeats()
+        public async Task<List<Seat>> GetSeats()
         {
             var concurrentDictionary = theaterDataService.GetSeats();
 
-            var seats = new List<SeatData>();
+            var seats = new List<Seat>();
 
             return concurrentDictionary
-                .Select(keyValuePair => new SeatData {
+                .Select(keyValuePair => new Seat {
                     SeatNumber = keyValuePair.Key,
                     IsAvailable = keyValuePair.Value })
                 .ToList();
